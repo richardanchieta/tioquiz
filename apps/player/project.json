@@ -1,0 +1,78 @@
+{
+  "root": "apps/player",
+  "sourceRoot": "apps/player/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nxext/svelte:build",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/player",
+        "entryFile": "apps/player/src/main.ts",
+        "tsConfig": "apps/player/tsconfig.app.json",
+        "svelteConfig": "apps/player/svelte.config.cjs",
+        "assets": [
+          {
+            "glob": "/*",
+            "input": "apps/player/public/**",
+            "output": "./"
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "dev": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nxext/svelte:build",
+      "options": {
+        "outputPath": "dist/apps/player",
+        "entryFile": "apps/player/src/main.ts",
+        "tsConfig": "apps/player/tsconfig.app.json",
+        "svelteConfig": "apps/player/svelte.config.cjs",
+        "assets": [
+          {
+            "glob": "/*",
+            "input": "apps/player/public/**",
+            "output": "./"
+          }
+        ],
+        "watch": true,
+        "serve": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/player/**/*.{ts,svelte,spec.ts}"
+        ]
+      }
+    },
+    "check": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "svelte-check",
+        "cwd": "apps/player"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/player"
+      ],
+      "options": {
+        "jestConfig": "apps/player/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

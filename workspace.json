@@ -1,7 +1,138 @@
 {
   "version": 2,
-  "projects": {},
-  "cli": {
-    "defaultCollection": "@nrwl/workspace"
+  "projects": {
+    "engine": {
+      "projectType": "application",
+      "root": "apps/engine",
+      "sourceRoot": "apps/engine",
+      "targets": {
+        "build": {
+          "executor": "@nx-go/nx-go:build",
+          "options": {
+            "outputPath": "dist/apps/engine",
+            "main": "apps/engine/main.go"
+          }
+        },
+        "serve": {
+          "executor": "@nx-go/nx-go:serve",
+          "options": {
+            "main": "apps/engine/main.go"
+          }
+        },
+        "test": {
+          "executor": "@nx-go/nx-go:test"
+        },
+        "lint": {
+          "executor": "@nx-go/nx-go:lint"
+        }
+      }
+    },
+    "host": "apps/host",
+    "host-e2e": "apps/host-e2e",
+    "panel": "apps/panel",
+    "panel-e2e": "apps/panel-e2e",
+    "player": "apps/player",
+    "player-e2e": "apps/player-e2e",
+    "studio-cms": {
+      "root": "apps/studio-cms",
+      "projectType": "application",
+      "sourceRoot": "apps/studio-cms/src",
+      "targets": {
+        "serve": {
+          "executor": "@nx-extend/strapi:serve"
+        },
+        "build": {
+          "executor": "@nx-extend/strapi:build",
+          "configurations": {
+            "production": {
+              "production": true
+            }
+          }
+        }
+      },
+      "tags": []
+    },
+    "studio-ui": {
+      "root": "apps/studio-ui",
+      "sourceRoot": "apps/studio-ui",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
+          "defaultConfiguration": "production",
+          "options": {
+            "root": "apps/studio-ui",
+            "outputPath": "dist/apps/studio-ui"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "studio-ui:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "studio-ui:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "executor": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "studio-ui:build:production"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/studio-ui"],
+          "options": {
+            "jestConfig": "apps/studio-ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/studio-ui/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "studio-ui-e2e": {
+      "root": "apps/studio-ui-e2e",
+      "sourceRoot": "apps/studio-ui-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/studio-ui-e2e/cypress.json",
+            "devServerTarget": "studio-ui:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "studio-ui:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/studio-ui-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["studio-ui"]
+    }
   }
 }
